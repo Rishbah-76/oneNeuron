@@ -3,26 +3,29 @@ from utils.model import Perceptron
 from utils.all_utils import prepare_data, save_model,save_plot
 import pandas as pd 
 import numpy as np
-OR = {
-    "x1": [0,0,1,1],
-    "x2": [0,1,0,1],
-    "y": [0,1,1,1],
-}
 
-df = pd.DataFrame(OR)
-print(df)
+def  main(data,eta,epochs,filename,plotname):
+    df = pd.DataFrame(data)
+    print(df)
+    X,y = prepare_data(df)
 
-X,y = prepare_data(df)
+    model = Perceptron(eta=ETA, epochs=EPOCHS)
+    model.fit(X, y)
 
-ETA = 0.3 # 0 and 1
-EPOCHS = 10
+    _ = model.total_loss() #THis is just a Dummy Varaible
 
-model_or = Perceptron(eta=ETA, epochs=EPOCHS)
-model_or.fit(X, y)
-
-_ = model_or.total_loss()
-
-save_model(model_or,filename="or.model")
-save_plot(df,"or.png",model_or)
+    save_model(model,filename="and.model")
+    save_plot(df,"and.png",model)
 
 
+if __name__=='__main__':
+    OR = {
+        "x1": [0,0,1,1],
+        "x2": [0,1,0,1],
+        "y": [0,1,1,1],
+    }
+
+    ETA = 0.3 # 0 and 1
+    EPOCHS = 10
+
+    main(data=OR,eta=ETA,epochs=EPOCHS,filename='or.model',plotname='or.png')
