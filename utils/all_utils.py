@@ -4,6 +4,7 @@ import pandas as pd
 import joblib # FOR SAVING MY MODEL AS A BINARY FILE
 from matplotlib.colors import ListedColormap
 import os
+import logging
 plt.style.use("fivethirtyeight") # THIS IS STYLE OF GRAPHS
 
 def prepare_data(df):
@@ -15,6 +16,7 @@ def prepare_data(df):
     Returns:
         tuple: It returns the tuple of Independent and Dependent variable"""
     
+    logging.info("Here We are Segementing the dependent variable and the independent Varaible")
     X = df.drop("y", axis=1)
     y = df["y"]
     return X, y
@@ -26,6 +28,7 @@ def save_model(model, filename):
         model (Python Object): Trained model to
         filename (str): Path to save the Trained model
     """
+    logging.info("Saving the Trained model")
     model_dir = "models"
     os.makedirs(model_dir, exist_ok=True) # ONLY CREATE IF MODEL_DIR DOESN"T EXISTS
     filePath = os.path.join(model_dir, filename) # model/filename
@@ -37,7 +40,9 @@ def save_plot(df, file_name, model):
     :param file_name: its Path to save the plot
     :param model: trained model
     """
+    logging.info("Saving the plot")
     def _create_base_plot(df):
+        logging.info('Creating a Base Plot grap varying from 0 to 1')
         df.plot(kind="scatter", x="x1", y="x2", c="y", s=100, cmap="winter")
         plt.axhline(y=0, color="black", linestyle="--", linewidth=1)
         plt.axvline(x=0, color="black", linestyle="--", linewidth=1)
@@ -45,6 +50,7 @@ def save_plot(df, file_name, model):
         figure.set_size_inches(10, 8)
 
     def _plot_decision_regions(X, y, classfier, resolution=0.02):
+        logging.info("Plotting decision regions")
         colors = ("red", "blue", "lightgreen", "gray", "cyan")
         cmap = ListedColormap(colors[: len(np.unique(y))])
 
@@ -56,8 +62,7 @@ def save_plot(df, file_name, model):
 
         xx1, xx2 = np.meshgrid(np.arange(x1_min, x1_max, resolution), 
                             np.arange(x2_min, x2_max, resolution))
-        print(xx1)
-        print(xx1.ravel())
+    
         Z = classfier.predict(np.array([xx1.ravel(), xx2.ravel()]).T)
         Z = Z.reshape(xx1.shape)
         plt.contourf(xx1, xx2, Z, alpha=0.2, cmap=cmap)
